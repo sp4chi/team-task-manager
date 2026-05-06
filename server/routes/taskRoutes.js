@@ -1,8 +1,8 @@
-import { Router } from 'express';
+import express from 'express';
 import Task from '../models/Task.js';
 import { authenticate as auth } from '../middlewares/authMiddleware.js';
 
-const router = Router();
+const router = express.Router();
 
 // Create task
 router.post('/', auth, async (req, res) => {
@@ -19,7 +19,7 @@ router.get('/', auth, async (req, res) => {
 // Update status
 router.patch('/:id', auth, async (req, res) => {
   const task = await Task.findByIdAndUpdate(req.params.id, req.body, {
-    new: true,
+    returnDocument: 'after',
   });
   res.json(task);
 });
