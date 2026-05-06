@@ -13,4 +13,5 @@ const taskSchema = new mongoose.Schema({
   dueDate: Date,
 });
 
-export default Task = mongoose.model('Task', taskSchema);
+const Task = mongoose.model('Task', taskSchema);
+export default Task;

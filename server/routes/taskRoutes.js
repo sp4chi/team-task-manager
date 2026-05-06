@@ -1,6 +1,6 @@
 import { Router } from 'express';
-import Task from '../models/Task';
-import auth from '../middleware/auth';
+import Task from '../models/Task.js';
+import { authenticate as auth } from '../middlewares/authMiddleware.js';
 
 const router = Router();
 
