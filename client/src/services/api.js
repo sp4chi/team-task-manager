@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const API = axios.create({
-  baseURL: 'team-task-manager-production-d9a5.up.railway.app/api',
+  baseURL: 'https://team-task-manager-production-d9a5.up.railway.app/api',
 });
 
 export const setAuthToken = (token) => {
