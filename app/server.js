@@ -25,6 +25,7 @@ const corsOptions = {
   methods: ['GET', 'POST', 'PATCH', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
 };
+console.log('CORS_ORIGINS:', process.env.CORS_ORIGINS);
 
 app.use(cors(corsOptions));
 app.options(/.*/, cors(corsOptions));
