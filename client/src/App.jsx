@@ -3,6 +3,7 @@ import Login from './pages/Login';
 import Signup from './pages/Signup';
 import Dashboard from './pages/Dashboard';
 import Tasks from './pages/Tasks';
+import ProtectedLayout from './components/ProtectedLayout';
 
 function App() {
   return (
@@ -10,8 +11,22 @@ function App() {
       <Routes>
         <Route path='/' element={<Login />} />
         <Route path='/signup' element={<Signup />} />
-        <Route path='/dashboard' element={<Dashboard />} />
-        <Route path='/tasks' element={<Tasks />} />
+        <Route
+          path='/dashboard'
+          element={
+            <ProtectedLayout>
+              <Dashboard />
+            </ProtectedLayout>
+          }
+        />
+        <Route
+          path='/tasks'
+          element={
+            <ProtectedLayout>
+              <Tasks />
+            </ProtectedLayout>
+          }
+        />
       </Routes>
     </BrowserRouter>
   );
