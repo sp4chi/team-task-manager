@@ -12,13 +12,13 @@ dotenv.config({ path: new URL('.env', import.meta.url) });
 const app = express();
 
 const corsOptions = {
-  origin: true,
+  origin: '*',
   methods: ['GET', 'POST', 'PATCH', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
 };
 
 app.use(cors(corsOptions));
-app.options(/.*/, cors(corsOptions));
+app.options('*', cors(corsOptions));
 app.use(express.json());
 
 mongoose
