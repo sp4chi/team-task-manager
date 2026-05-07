@@ -11,23 +11,14 @@ dotenv.config({ path: new URL('.env', import.meta.url) });
 //console.log('MONGO_URI:', process.env.MONGO_URI);
 const app = express();
 
-const allowedOrigins =
-  process.env.CORS_ORIGINS?.split(',').map((origin) => origin.trim()) || [];
+const corsOptions = {
+  origin: true,
+  methods: ['GET', 'POST', 'PATCH', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+};
 
-app.use(
-  cors({
-    origin: (origin, callback) => {
-      if (!origin) return callback(null, true);
-      if (allowedOrigins.length === 0 || allowedOrigins.includes(origin)) {
-        return callback(null, true);
-      }
-      return callback(new Error('CORS not allowed'));
-    },
-    methods: ['GET', 'POST', 'PATCH', 'PUT', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
-  }),
-);
-app.options(/.*/, cors());
+app.use(cors(corsOptions));
+app.options(/.*/, cors(corsOptions));
 app.use(express.json());
 
 mongoose
