@@ -18,25 +18,25 @@ export default function Tasks() {
   });
   const [error, setError] = useState('');
 
-  const loadData = async () => {
-    try {
-      const [tasksRes, projectsRes] = await Promise.all([
-        API.get('/tasks'),
-        API.get('/projects'),
-      ]);
-      setTasks(tasksRes.data);
-      setProjects(projectsRes.data);
-
-      if (isAdmin) {
-        const usersRes = await API.get('/users');
-        setUsers(usersRes.data);
-      }
-    } catch (err) {
-      setError(err?.response?.data?.msg || 'Failed to load tasks');
-    }
-  };
-
   useEffect(() => {
+    const loadData = async () => {
+      try {
+        const [tasksRes, projectsRes] = await Promise.all([
+          API.get('/tasks'),
+          API.get('/projects'),
+        ]);
+        setTasks(tasksRes.data);
+        setProjects(projectsRes.data);
+
+        if (isAdmin) {
+          const usersRes = await API.get('/users');
+          setUsers(usersRes.data);
+        }
+      } catch (err) {
+        setError(err?.response?.data?.msg || 'Failed to load tasks');
+      }
+    };
+
     loadData();
   }, [isAdmin]);
 
