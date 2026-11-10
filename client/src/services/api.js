@@ -3,7 +3,7 @@ import axios from 'axios';
 const API = axios.create({
   baseURL:
     import.meta.env.VITE_API_URL ||
-    'https://team-task-manager-production-d9a5.up.railway.app/api',
+    'https://taskmanager-api.duckdns.org/api',
 });
 
 export const setAuthToken = (token) => {
