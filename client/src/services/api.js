@@ -14,4 +14,18 @@ export const setAuthToken = (token) => {
   }
 };
 
+// A rejected token (expired, or signed with a different JWT_SECRET) logs the user out
+API.interceptors.response.use(
+  (res) => res,
+  (err) => {
+    if (err?.response?.status === 401 && localStorage.getItem('token')) {
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+      setAuthToken(null);
+      window.location.replace('/');
+    }
+    return Promise.reject(err);
+  },
+);
+
 export default API;

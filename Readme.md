@@ -2,6 +2,9 @@
 
 A full-stack web application to manage projects and tasks with role-based access control (Admin / Member). Users can create projects, assign tasks, and track progress through a simple dashboard.
 
+- **Frontend:** https://team-task-manager-rho-virid.vercel.app
+- **API:** https://taskmanager-api.duckdns.org/api
+
 ---
 
 ## 📌 Features
@@ -12,7 +15,7 @@ A full-stack web application to manage projects and tasks with role-based access
 - 📋 Task Creation & Assignment
 - 🔄 Task Status Tracking (Todo / In Progress / Done)
 - 📊 Dashboard Overview
-- 🌍 Fully Deployed (Railway + Vercel)
+- 🌍 Fully Deployed (AWS EC2 + Vercel)
 
 ---
 
@@ -32,7 +35,7 @@ A full-stack web application to manage projects and tasks with role-based access
 
 **Deployment**
 
-- Railway (Backend)
+- AWS EC2 — backend in Docker, behind Caddy (automatic HTTPS)
 - Vercel (Frontend)
 
 ---
@@ -42,18 +45,20 @@ A full-stack web application to manage projects and tasks with role-based access
 ```
 team-task-manager/
 │
-├── app/        # Backend (Node.js + Express)
+├── app/              # Backend (Node.js + Express)
+│   ├── controllers/
+│   ├── middlewares/
 │   ├── models/
 │   ├── routes/
-│   ├── controllers/
-│   ├── middleware/
 │   └── server.js
 │
-├── client/        # Frontend (React)
+├── client/           # Frontend (React + Vite)
 │   ├── src/
 │   └── index.html
 │
-└── README.md
+├── Dockerfile        # Backend image
+├── package.json      # Backend dependencies & scripts
+└── Readme.md
 ```
 
 ---
@@ -63,7 +68,7 @@ team-task-manager/
 ### 🔹 1. Clone Repository
 
 ```bash
-git clone https://github.com/your-username/team-task-manager.git
+git clone https://github.com/sp4chi/team-task-manager.git
 cd team-task-manager
 ```
 
@@ -71,18 +76,14 @@ cd team-task-manager
 
 ### 🔹 2. Setup Backend
 
+The backend lives in `app/`, but its `package.json` is at the repository root, so run these from the root:
+
 ```bash
-cd server
 npm install
 npm run dev
 ```
 
-Create `.env` inside `/server`:
-
-```env
-MONGO_URI=your_mongodb_connection_string
-JWT_SECRET=your_secret_key
-```
+Create `app/.env` (see [Environment Variables](#-environment-variables)). The API runs on `http://localhost:5000` unless `PORT` is set.
 
 ---
 
@@ -94,16 +95,49 @@ npm install
 npm run dev
 ```
 
+To point the frontend at your local backend, create `client/.env`:
+
+```env
+VITE_API_URL=http://localhost:5000/api
+```
+
 ---
 
 ## 🔐 Environment Variables
 
-### Backend (`/server/.env`)
+### Backend (`app/.env`)
 
+```env
+MONGO_URI=your_mongodb_connection_string
+JWT_SECRET=your_secret_key
+FRONTEND_URL=http://localhost:5173   # allowed CORS origin
+PORT=5000                            # optional, defaults to 5000
 ```
-MONGO_URI=your_mongo_uri
-JWT_SECRET=your_secret
+
+### Frontend (`client/.env`)
+
+```env
+VITE_API_URL=https://taskmanager-api.duckdns.org/api   # optional, this is the default
 ```
+
+---
+
+## 🐳 Deployment (Backend on EC2)
+
+The backend runs as a Docker container on the same Docker network as Caddy, which proxies `taskmanager-api.duckdns.org` to it.
+
+```bash
+git pull
+docker build -t team-task-manager-api:latest .
+docker rm -f taskmanager-api
+docker run -d --name taskmanager-api \
+  --network landing-iq_default \
+  --env-file .env \
+  --restart unless-stopped \
+  team-task-manager-api:latest
+```
+
+The `.env` file is passed at runtime and is never copied into the image.
 
 ---
 
@@ -114,30 +148,30 @@ JWT_SECRET=your_secret
 - `POST /api/auth/signup`
 - `POST /api/auth/login`
 
+### Users
+
+- `GET /api/users/me`
+- `GET /api/users` (Admin)
+
 ### Projects
 
 - `POST /api/projects` (Admin)
 - `GET /api/projects`
+- `POST /api/projects/:id/members` (Admin)
 
 ### Tasks
 
-- `POST /api/tasks`
+- `POST /api/tasks` (Admin)
 - `GET /api/tasks`
+- `GET /api/tasks/summary`
 - `PATCH /api/tasks/:id`
-
----
-
-## 🎥 Demo Video
-
-👉 Add your demo video link here (2–5 minutes)
 
 ---
 
 ## ⚠️ Notes
 
 - Ensure backend is running before frontend in local setup
-- Use correct API base URL in frontend (`/api`)
-- CORS enabled for cross-origin requests
+- `FRONTEND_URL` must match the frontend's origin, or the browser will block requests with a CORS error
 
 ---
 
