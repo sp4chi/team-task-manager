@@ -7,7 +7,6 @@ export default function Signup() {
     name: '',
     email: '',
     password: '',
-    role: 'member',
   });
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
@@ -66,15 +65,6 @@ export default function Signup() {
           required
           onChange={(e) => setForm({ ...form, password: e.target.value })}
         />
-
-        <label className='label'>Role</label>
-        <select
-          className='select'
-          value={form.role}
-          onChange={(e) => setForm({ ...form, role: e.target.value })}>
-          <option value='admin'>Admin</option>
-          <option value='member'>Member</option>
-        </select>
 
         <button className='btn btn-primary' disabled={loading}>
           {loading ? 'Creating...' : 'Sign up'}

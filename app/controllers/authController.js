@@ -4,7 +4,7 @@ import jwt from 'jsonwebtoken';
 
 export const signup = async (req, res) => {
   try {
-    const { name, email, password, role } = req.body;
+    const { name, email, password } = req.body;
 
     if (!name || !email || !password) {
       return res.status(400).json({ msg: 'Name, email, and password required' });
@@ -19,7 +19,8 @@ export const signup = async (req, res) => {
       name,
       email,
       password: hashed,
-      role: role || 'member',
+      // Public signup never grants admin; any role in the request body is ignored
+      role: 'member',
     });
 
     res.status(201).json({
