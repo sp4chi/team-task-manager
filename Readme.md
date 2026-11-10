@@ -4,13 +4,6 @@ A full-stack web application to manage projects and tasks with role-based access
 
 ---
 
-## 🌐 Live Demo
-
-- **Frontend (Vercel):** https://team-task-manager-rho-virid.vercel.app
-- **Backend (Railway):** team-task-manager-production-d9a5.up.railway.app
-
----
-
 ## 📌 Features
 
 - 🔐 User Authentication (Signup / Login with JWT)
